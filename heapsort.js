@@ -1,9 +1,11 @@
 //   [0]  [1]  [2]  [3]  [4]  [5]  [6]  [7]
 //    4    7    2    5    1    6    8    0
 //
-//          0
-//     1        2
-//  3     4  5     6
+//          0                              4
+//     1        2                ->    7       2
+//  3     4  5     6                5    1  6    8
+
+// left-child = parent * 2 + 1  , right-child = parent * 2 + 2
 
 //  [0] [1] [2] [3] [4] [5] [6]
 //   4   9   11   12   10    7    1
@@ -33,7 +35,6 @@
 
 
 //  13  11   12   4    10    7    9
-
 
 function heapsort(array_to_sort)  // modifies input array
 {
@@ -80,7 +81,7 @@ function heapsort(array_to_sort)  // modifies input array
             {
                 bigger_child_idx = bigger_child_idx + 1;
             }
-            if (a[parent_idx] < a[bigger_child_idx]) {
+            if (a[parent_idx] < a[bigger_child_id               x]) {
                 const saved_value = a[bigger_child_idx];
                 a[bigger_child_idx] = a[parent_idx];
                 a[parent_idx] = saved_value;
@@ -93,3 +94,110 @@ function heapsort(array_to_sort)  // modifies input array
     }
     return a;
 }
+
+// Frequency count...  iterating over input characters and tallying by character
+
+// Make a heap of frequency / tree nodes associations
+
+// Grab two nodes that are the 'smallest' (lowest frequency), create an internal node with those two as children,
+//     stop when only one node left
+// Re-encode input using our new knowledge expressed in the huffman tree that we just built
+//  - Make a dictionary mapping letters to bit strings
+//  - Go through each input letter, lookup mapping, output bits
+ 
+ // string -> array of integers index by character containing the frequency count for each character
+
+// str = "hobgoblins are green"
+// str = "evles have pointy ears"
+function charCounter(str) {
+    let counts = [];
+    
+    for (let i = 0; i<str.length; ++i) {
+        let char = str[i];
+        if (char in counts) {
+            counts[char] = counts[char] + 1;
+        } else {
+            counts[char] = 1;
+        }
+    }
+    return counts;    
+}
+
+function addToHeap(heap, val, compare) {
+}
+
+function frequencyToNodes(counts) {
+    nodelist = []
+    for (letter in counts) {
+        nodelist.push({'letter': letter, 'frequency': counts[letter]})
+    }
+}
+
+
+/**************************************************************************************
+
+==== Associative array ==== (https://www.dyn-web.com/javascript/arrays/associative.php)
+// counts= []
+// counts['a']= 5
+// > 'a' in counts
+// true
+// > 'b' in counts
+// false
+// counts['a'] = 5
+// counts['b'] = 3
+// > charCounter("hobgoblins are green")
+// [
+//   h: 1, o: 2, b: 2,
+//   g: 2, l: 1, i: 1,
+//   n: 2, s: 1, ' ': 2,
+//   a: 1, r: 2, e: 3
+// ]
+// [ O10:20 ];
+
+       / \
+      0   1
+
+        O2: 3    O3: 4    O4: 4
+         / \      / \      /   \
+       a:1 o:2  b:2 g:2  n:2 ' ':2
+    
+    
+                 O5: 4
+              ___/    \___
+             /            \
+           r:2           O0:2
+                         /  \
+                        h:1 l:1
+ 
+                 O6: 5
+              ___/    \___
+             /            \
+           O1:2           e:3
+           / \
+         i:1 s:1
+         
+         
+         O7: 7 (O2, O3)
+         O8: 8 (O4, O5)
+         O9:12 (O6, O7)
+        O10:20 (O8, O9)
+        
+        e: 101
+        a: 1100
+        r: 010    - Huffman tree
+
+*/
+
+// AST (aka Abstract Syntax Tree)
+ 
+//      x * (a + b)
+//
+//         *
+//      x      +
+//           a   b
+
+//     ((x * a) + b) - 5
+//               -
+//         +        5
+//      *    b
+//    x   a
