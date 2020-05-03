@@ -124,6 +124,26 @@ function charCounter(str) {
 }
 
 function addToHeap(heap, val, compare) {
+    const heap_begin_idx = 0;
+    var heap_end_idx = heap.length;
+    heap.push(val);
+    var current_child_idx = heap_end_idx;
+    while (current_child_idx <= heap_begin_idx) {
+        var current_parent_idx = Math.floor((current_child_idx - 1) / 2);
+        if (compare(heap[current_child_idx],  heap[current_parent_idx]) > 0) {
+            const saved_value = heap[current_child_idx];
+            heap[current_child_idx] = heap[current_parent_idx];
+            heap[current_parent_idx] = saved_value;
+            current_child_idx = current_parent_idx;
+        } else {
+            break;
+        }
+    }
+}
+
+// Returns the top of the heap and removes it.  But, the heap is _still_ a heap
+// after this function completes.
+function popFromHeap(heap, compare) {
 }
 
 function frequencyToNodes(counts) {
