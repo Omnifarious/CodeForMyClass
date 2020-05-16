@@ -5,6 +5,9 @@
 //     1        2                ->    7       2
 //  3     4  5     6                5    1  6    8
 
+//                                         7
+//                                     4       6
+//                                  1    2  5    8
 // left-child = parent * 2 + 1  , right-child = parent * 2 + 2
 
 //  [0] [1] [2] [3] [4] [5] [6]
@@ -74,14 +77,14 @@ function heapsort(array_to_sort)  // modifies input array
         }
         //   11    1    9   4    10    7  | 12
         let parent_idx = heap_begin_idx;
-        let bigger_child_idx = parent_idx * 2 + 1;
+        let bigger_child_idx = parent_idx * 2 + 1;  // Assume the left hand child is biggest
         while (bigger_child_idx < heap_end_idx) {
-            if (((bigger_child_idx + 1) < heap_end_idx)
-                && (a[bigger_child_idx] < a[bigger_child_idx + 1]))
+            if (((bigger_child_idx + 1) < heap_end_idx)  // If we have right hand child
+                && (a[bigger_child_idx] < a[bigger_child_idx + 1]))  // and the right hand child happens to be bigger
             {
-                bigger_child_idx = bigger_child_idx + 1;
+                bigger_child_idx = bigger_child_idx + 1;  // Fix our mistaken assumption
             }
-            if (a[parent_idx] < a[bigger_child_id               x]) {
+            if (a[parent_idx] < a[bigger_child_idx]) {
                 const saved_value = a[bigger_child_idx];
                 a[bigger_child_idx] = a[parent_idx];
                 a[parent_idx] = saved_value;
@@ -145,6 +148,14 @@ function addToHeap(heap, val, compare) {
 // after this function completes.
 function popFromHeap(heap, compare) {
 }
+
+function foo(a) {
+    a[0] = 15
+}
+b = [5]
+foo(b)
+
+
 
 function frequencyToNodes(counts) {
     nodelist = []
