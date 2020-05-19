@@ -1,4 +1,4 @@
-//   [0]  [1]  [2]  [3]  [4]  [5]  [6]  [7]
+              //   [0]  [1]  [2]  [3]  [4]  [5]  [6]  [7]
 //    4    7    2    5    1    6    8    0
 //
 //          0                              4
@@ -107,14 +107,14 @@ function heapsort(array_to_sort)  // modifies input array
 // Re-encode input using our new knowledge expressed in the huffman tree that we just built
 //  - Make a dictionary mapping letters to bit strings
 //  - Go through each input letter, lookup mapping, output bits
- 
+
  // string -> array of integers index by character containing the frequency count for each character
 
 // str = "hobgoblins are green"
 // str = "evles have pointy ears"
 function charCounter(str) {
     let counts = [];
-    
+
     for (let i = 0; i<str.length; ++i) {
         let char = str[i];
         if (char in counts) {
@@ -123,7 +123,7 @@ function charCounter(str) {
             counts[char] = 1;
         }
     }
-    return counts;    
+    return counts;
 }
 
 function addToHeap(heap, val, compare) {
@@ -144,17 +144,45 @@ function addToHeap(heap, val, compare) {
     }
 }
 
+// npm i -g jest
+// jest
+
+// test('heap of 1', () => {
+    // expect(idxValue).toBe(expectedValue)
+// }')
+
+// npm init
+// npm i jest --save
+// $ node ./node_modules/jest/index.js
+
 // Returns the top of the heap and removes it.  But, the heap is _still_ a heap
 // after this function completes.
 function popFromHeap(heap, compare) {
+    let trckdValIdx = 0;
+    const poppedElemStore = heap[0];
+    const trckdElem = heap.pop();
+    do {
+        let swpIdx;
+        heap[trckdValIdx] = trckdElem;
+        //could eliminate next two lines by using literals on 162, but assigning vars makes structure of tree vs array more clear
+        let leftChld = heap[trckdValIdx * 2 + 1] || Number.NEGATIVE_INFINITY,
+            rightChld = heap[trckdValIdx * 2 + 2] || Number.NEGATIVE_INFINITY;
+            //assumption made: value of compare(L, R) will be >0 if L>R; <0 if L<R
+        if (compare(leftChld, rightChld) > 0){
+            swpIdx = trckdValIdx * 2 + 1;
+        } else {
+            swpIdx = trckdValIdx * 2 + 2;
+        }
+        if(compare(heap[trckdValIdx], heap[swpIdx]) < 0){
+            heap[trckdValIdx] = heap[swpIdx];
+            heap[swpIdx] = trckdElem;
+            trckdValIdx = swpIdx;
+        } else {
+            break;
+        }
+    } while (trckdValIdx * 2 + 1 < heap.length);
+    return poppedElemStore
 }
-
-function foo(a) {
-    a[0] = 15
-}
-b = [5]
-foo(b)
-
 
 
 function frequencyToNodes(counts) {
@@ -183,6 +211,10 @@ function frequencyToNodes(counts) {
 //   n: 2, s: 1, ' ': 2,
 //   a: 1, r: 2, e: 3
 // ]
+
+// [ h: 1, l: 1, i: 1, s: 1, a: 1, o: 2, b: 2, g: 2, n: 2, ' ': 2, r: 2 e: 3]
+// [ i: 1, s: 1, a: 1, o: 2, b: 2, g: 2, n: 2, ' ': 2, r: 2, e: 3]
+// [ O0: 2, O1: 2,  ]
 // [ O10:20 ];
 
        / \
@@ -191,28 +223,28 @@ function frequencyToNodes(counts) {
         O2: 3    O3: 4    O4: 4
          / \      / \      /   \
        a:1 o:2  b:2 g:2  n:2 ' ':2
-    
-    
+
+
                  O5: 4
               ___/    \___
              /            \
            r:2           O0:2
                          /  \
                         h:1 l:1
- 
+
                  O6: 5
               ___/    \___
              /            \
            O1:2           e:3
            / \
          i:1 s:1
-         
-         
+
+
          O7: 7 (O2, O3)
          O8: 8 (O4, O5)
          O9:12 (O6, O7)
         O10:20 (O8, O9)
-        
+
         e: 101
         a: 1100
         r: 010    - Huffman tree
@@ -220,7 +252,7 @@ function frequencyToNodes(counts) {
 */
 
 // AST (aka Abstract Syntax Tree)
- 
+
 //      x * (a + b)
 //
 //         *
