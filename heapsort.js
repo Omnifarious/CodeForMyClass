@@ -161,12 +161,12 @@ function popFromHeap(heap, compare) {
     let trckdValIdx = 0;
     const poppedElemStore = heap[0];
     const trckdElem = heap.pop();
-    do {
+    while (trckdValIdx * 2 + 1 < heap.length){
         let swpIdx;
-        heap[trckdValIdx] = trckdElem;
-        //could eliminate next two lines by using literals on 162, but assigning vars makes structure of tree vs array more clear
-        let leftChld = heap[trckdValIdx * 2 + 1] || Number.NEGATIVE_INFINITY,
-            rightChld = heap[trckdValIdx * 2 + 2] || Number.NEGATIVE_INFINITY;
+        //these assignments ensure that if no such node exists, it will be treated as less than and therefore a valid heap stack
+        let leftChld = heap[trckdValIdx * 2 + 1],
+            //rightChld = (heap[trckdValIdx * 2 + 2] !== undefined) ? heap[trckdValIdx * 2 + 2]:Number.NEGATIVE_INFINITY;
+            rightChld = heap[trckdValIdx * 2 + 2];
             //assumption made: value of compare(L, R) will be >0 if L>R; <0 if L<R
         if (compare(leftChld, rightChld) > 0){
             swpIdx = trckdValIdx * 2 + 1;
@@ -175,13 +175,40 @@ function popFromHeap(heap, compare) {
         }
         if(compare(heap[trckdValIdx], heap[swpIdx]) < 0){
             heap[trckdValIdx] = heap[swpIdx];
-            heap[swpIdx] = trckdElem;
             trckdValIdx = swpIdx;
+        } else {
+            heap[trckdValIdx] = trckdElem;
+            break;
+        }
+    };
+    //will return popped element if heap.length > 0 && valid input, else null
+    return poppedElemStore || null
+}
+
+
+function popFromHeap2(heap, compare) {
+    const poppedElemStore = heap[0];
+    const siftedElement = heap.pop();
+    let parentIdx = 0;
+    let childIdx;
+    while ((childIdx = parentIdx * 2 + 1) < heap.length) {
+        if (((childIdx + 1) < heap.length)
+            && (compare(heap[childIdx], heap[childIdx + 1]) > 0))
+        {
+            childIdx = childIdx + 1;
+        }
+        if (compare(siftedElement, heap[childIdx]) > 0) {
+            heap[parentIdx] = heap[childIdx];
+            parentIdx = childIdx;
         } else {
             break;
         }
-    } while (trckdValIdx * 2 + 1 < heap.length);
-    return poppedElemStore
+    }
+    // Critical for handling the cases of heap of length 1, and 2.
+    if (parentIdx < heap.length) {
+        heap[parentIdx] = siftedElement;
+    }
+    return poppedElemStore;
 }
 
 
