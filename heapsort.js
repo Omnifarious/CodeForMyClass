@@ -126,7 +126,7 @@ function charCounter(str) {
     return counts;
 }
 
-function addToHeap(heap, val, compare) {
+function addToHeap(heap, compare, val) {
     const heap_begin_idx = 0;
     var heap_end_idx = heap.length;
     heap.push(val);
@@ -155,38 +155,7 @@ function addToHeap(heap, val, compare) {
 // npm i jest --save
 // $ node ./node_modules/jest/index.js
 
-// Returns the top of the heap and removes it.  But, the heap is _still_ a heap
-// after this function completes.
 function popFromHeap(heap, compare) {
-    let trckdValIdx = 0;
-    const poppedElemStore = heap[0];
-    const trckdElem = heap.pop();
-    while (trckdValIdx * 2 + 1 < heap.length){
-        let swpIdx;
-        //these assignments ensure that if no such node exists, it will be treated as less than and therefore a valid heap stack
-        let leftChld = heap[trckdValIdx * 2 + 1],
-            //rightChld = (heap[trckdValIdx * 2 + 2] !== undefined) ? heap[trckdValIdx * 2 + 2]:Number.NEGATIVE_INFINITY;
-            rightChld = heap[trckdValIdx * 2 + 2];
-            //assumption made: value of compare(L, R) will be >0 if L>R; <0 if L<R
-        if (compare(leftChld, rightChld) > 0){
-            swpIdx = trckdValIdx * 2 + 1;
-        } else {
-            swpIdx = trckdValIdx * 2 + 2;
-        }
-        if(compare(heap[trckdValIdx], heap[swpIdx]) < 0){
-            heap[trckdValIdx] = heap[swpIdx];
-            trckdValIdx = swpIdx;
-        } else {
-            heap[trckdValIdx] = trckdElem;
-            break;
-        }
-    };
-    //will return popped element if heap.length > 0 && valid input, else null
-    return poppedElemStore || null
-}
-
-
-function popFromHeap2(heap, compare) {
     const poppedElemStore = heap[0];
     const siftedElement = heap.pop();
     let parentIdx = 0;
@@ -212,11 +181,42 @@ function popFromHeap2(heap, compare) {
 }
 
 
+// Huffman tree node contains...
+//    a total frequency count for all of it's children
+//    left child (will be undef for a leaf)
+//    right child (will be undef for a leaf)
+//    symbol (will be undef for a non-leaf (internal) node)
+
+function huffNodeCompare(nodeA, nodeB) {
+    return nodeA.frequency - nodeB.frequency;
+}
+
+
 function frequencyToNodes(counts) {
-    nodelist = []
-    for (letter in counts) {
-        nodelist.push({'letter': letter, 'frequency': counts[letter]})
+    nodeheap = [];
+    for (character in counts) {
+        const leafNode = {'symbol': character, 'frequency': counts[character]}
+        addToHeap(nodeheap, huffNodeCompare, leafNode);
     }
+    return nodeheap;
+}
+
+
+function buildHuffTree(nodeheap) {
+    while (nodeheap.length > 1) {
+        var smallestThing = popFromHeap(nodeheap, huffNodeCompare);
+        var nextSmallestThing = popFromHeap(nodeheap, huffNodeCompare);
+        const internalNode = {'frequency': smallestThing.frequency + nextSmallestThing.frequency,
+                            'left': smallestThing,
+                            'right': nextSmallestThing};
+        addToHeap(nodeheap, huffNodeCompare, internalNode);
+    }
+    return nodeheap[0];  // or return popFromHeap(nodeheap, huffNodeCompare);
+}
+
+
+function huffTreeFromString(s) {
+    // returns the top node of the huffman tree built from string 's'.
 }
 
 
