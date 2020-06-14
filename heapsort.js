@@ -1,4 +1,4 @@
-              //   [0]  [1]  [2]  [3]  [4]  [5]  [6]  [7]
+//   [0]  [1]  [2]  [3]  [4]  [5]  [6]  [7]
 //    4    7    2    5    1    6    8    0
 //
 //          0                              4
@@ -10,7 +10,7 @@
 //                                  1    2  5    8
 // left-child = parent * 2 + 1  , right-child = parent * 2 + 2
 
-//  [0] [1] [2] [3] [4] [5] [6]
+//  [0] [1]  [2]  [3] [4]   [5]  [6]
 //   4   9   11   12   10    7    1
 
 // Make heap
@@ -29,6 +29,7 @@
 
 
 //   1  11    9   4    10    7  | 12
+//  11   1    9   4    10    7
 //  11  10    9   4     1    7  | 12
 //   7  10    9   4     1  | 11   12
 //  10   7    9   4     1  | 11   12
@@ -131,7 +132,7 @@ function addToHeap(heap, compare, val) {
     var heap_end_idx = heap.length;
     heap.push(val);
     var current_child_idx = heap_end_idx;
-    while (current_child_idx <= heap_begin_idx) {
+    while (current_child_idx > heap_begin_idx) {
         var current_parent_idx = Math.floor((current_child_idx - 1) / 2);
         if (compare(heap[current_child_idx],  heap[current_parent_idx]) > 0) {
             const saved_value = heap[current_child_idx];
@@ -217,6 +218,10 @@ function buildHuffTree(nodeheap) {
 
 function huffTreeFromString(s) {
     // returns the top node of the huffman tree built from string 's'.
+    var charCounts = charCounter(s);
+    var freqToNode = frequencyToNodes(charCounts);
+    var buildTree = buildHuffTree(freqToNode);
+    return buildTree;
 }
 
 
