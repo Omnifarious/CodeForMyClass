@@ -163,11 +163,11 @@ function popFromHeap(heap, compare) {
     let childIdx;
     while ((childIdx = parentIdx * 2 + 1) < heap.length) {
         if (((childIdx + 1) < heap.length)
-            && (compare(heap[childIdx], heap[childIdx + 1]) > 0))
+            && (compare(heap[childIdx], heap[childIdx + 1]) < 0))
         {
             childIdx = childIdx + 1;
         }
-        if (compare(siftedElement, heap[childIdx]) > 0) {
+        if (compare(siftedElement, heap[childIdx]) < 0) {
             heap[parentIdx] = heap[childIdx];
             parentIdx = childIdx;
         } else {
@@ -189,7 +189,7 @@ function popFromHeap(heap, compare) {
 //    symbol (will be undef for a non-leaf (internal) node)
 
 function huffNodeCompare(nodeA, nodeB) {
-    return nodeA.frequency - nodeB.frequency;
+    return nodeB.frequency - nodeA.frequency;
 }
 
 
@@ -219,11 +219,18 @@ function buildHuffTree(nodeheap) {
 function huffTreeFromString(s) {
     // returns the top node of the huffman tree built from string 's'.
     var charCounts = charCounter(s);
+    if (Object.keys(charCounts).length < 2) {
+        I_am_an_error_on_purpose();
+    }
     var freqToNode = frequencyToNodes(charCounts);
     var buildTree = buildHuffTree(freqToNode);
     return buildTree;
 }
 
+
+// A function that takes a huffman tree and produces an index associating a
+// character with the string of bits used to represent that character.
+// Recursion  -  depth first traversal
 
 /**************************************************************************************
 
