@@ -109,14 +109,14 @@ function heapsort(array_to_sort)  // modifies input array
 //  - Make a dictionary mapping letters to bit strings
 //  - Go through each input letter, lookup mapping, output bits
 
- // string -> array of integers index by character containing the frequency count for each character
+// string -> array of integers index by character containing the frequency count for each character
 
 // str = "hobgoblins are green"
 // str = "evles have pointy ears"
 function charCounter(str) {
     let counts = [];
 
-    for (let i = 0; i<str.length; ++i) {
+    for (let i = 0; i < str.length; ++i) {
         let char = str[i];
         if (char in counts) {
             counts[char] = counts[char] + 1;
@@ -134,7 +134,7 @@ function addToHeap(heap, compare, val) {
     var current_child_idx = heap_end_idx;
     while (current_child_idx > heap_begin_idx) {
         var current_parent_idx = Math.floor((current_child_idx - 1) / 2);
-        if (compare(heap[current_child_idx],  heap[current_parent_idx]) > 0) {
+        if (compare(heap[current_child_idx], heap[current_parent_idx]) > 0) {
             const saved_value = heap[current_child_idx];
             heap[current_child_idx] = heap[current_parent_idx];
             heap[current_parent_idx] = saved_value;
@@ -149,7 +149,7 @@ function addToHeap(heap, compare, val) {
 // jest
 
 // test('heap of 1', () => {
-    // expect(idxValue).toBe(expectedValue)
+// expect(idxValue).toBe(expectedValue)
 // }')
 
 // npm init
@@ -163,8 +163,7 @@ function popFromHeap(heap, compare) {
     let childIdx;
     while ((childIdx = parentIdx * 2 + 1) < heap.length) {
         if (((childIdx + 1) < heap.length)
-            && (compare(heap[childIdx], heap[childIdx + 1]) < 0))
-        {
+            && (compare(heap[childIdx], heap[childIdx + 1]) < 0)) {
             childIdx = childIdx + 1;
         }
         if (compare(siftedElement, heap[childIdx]) < 0) {
@@ -196,7 +195,7 @@ function huffNodeCompare(nodeA, nodeB) {
 function frequencyToNodes(counts) {
     nodeheap = [];
     for (character in counts) {
-        const leafNode = {'symbol': character, 'frequency': counts[character]}
+        const leafNode = { 'symbol': character, 'frequency': counts[character] }
         addToHeap(nodeheap, huffNodeCompare, leafNode);
     }
     return nodeheap;
@@ -207,9 +206,11 @@ function buildHuffTree(nodeheap) {
     while (nodeheap.length > 1) {
         var smallestThing = popFromHeap(nodeheap, huffNodeCompare);
         var nextSmallestThing = popFromHeap(nodeheap, huffNodeCompare);
-        const internalNode = {'frequency': smallestThing.frequency + nextSmallestThing.frequency,
-                            'left': smallestThing,
-                            'right': nextSmallestThing};
+        const internalNode = {
+            'frequency': smallestThing.frequency + nextSmallestThing.frequency,
+            'left': smallestThing,
+            'right': nextSmallestThing
+        };
         addToHeap(nodeheap, huffNodeCompare, internalNode);
     }
     return nodeheap[0];  // or return popFromHeap(nodeheap, huffNodeCompare);
@@ -220,6 +221,7 @@ function huffTreeFromString(s) {
     // returns the top node of the huffman tree built from string 's'.
     var charCounts = charCounter(s);
     if (Object.keys(charCounts).length < 2) {
+        -
         I_am_an_error_on_purpose();
     }
     var freqToNode = frequencyToNodes(charCounts);
@@ -228,9 +230,110 @@ function huffTreeFromString(s) {
 }
 
 
+function sequential_sum(n) {
+    if (n <= 0) {
+        return 0;
+    } else {
+        console.log(n)
+        return n + sequential_sum(n - 1);
+    }
+}
+
+function fibonacci(n) {
+    if (n <= 0) {
+        return 0;
+    } if (n == 1) {
+        return 1;
+    } else {
+        return fibonacci(n - 1) + fibonacci(n - 2);
+    }
+}
+
+function i_am_a_function(n) {
+    console.log(n);
+}
+
+//   fibonacci(4)
+//  n = 4
+//  fibonacci(3) + fibonacci(2)
+//  +
+//  +---- fibonacci(3)
+//        n = 3
+//        fibonacci(2) + fibonacci(1)
+//        +
+//        +---- fibonacci(2)
+//              n = 2
+//              fibonacci(1) + fibonacci(0)
+//               +
+//               +----- fibonacci(1)
+//                       n = 1
+//                       <- 1
+//               +
+//              1 + fibonacci(0)
+//               +
+//               +----- fibonacci(0)
+//                      n = 0
+//                      <- 0
+//               +
+//              1 + 0
+//              <- 1
+//        +
+//        1 + fibonacci(1)
+//        +
+//        +----- fibonacci(1)
+//               n = 1
+//               <- 1
+//        +                         
+//        1 + 1
+//        <- 2
+//  +
+//  2 + fibancci(2)
+//  +
+//  +----- fibonacci(2)
+//         n = 2
+//         fibonacci(1) + fibonacci(0)
+//         +
+//         +----- fibonacci(1)
+//                n = 1
+//                <- 1
+//        +
+//        1 + fibonacci(0)
+//        +
+//        +------ fibonacci(0)
+//                n = 0
+//                <- 0
+//        1 + 0
+//        <- 1
+//  +
+//  2 + 1
+//  <- 3
+
+// 0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55
+// Fn = Fn-1 + Fn-2
+
+
+function fib(seq = [1, 1]) {
+    console.log(seq[1]);
+    return fib([seq[1], seq[0] + seq[1]]);
+};
+
+function limitedFib(n, seq = [1, 1]) {
+    if (typeof n !== number) {
+        return 'non-number input';
+    };
+    console.log(n[1]);
+    return (n <= 2) ? seq[1] : fib(n - 1, [seq[1], seq[0] + seq[1]]);
+};
+
+
+
 // A function that takes a huffman tree and produces an index associating a
 // character with the string of bits used to represent that character.
 // Recursion  -  depth first traversal
+
+
+
+
 
 /**************************************************************************************
 
