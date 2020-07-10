@@ -1,4 +1,4 @@
-//   [0]  [1]  [2]  [3]  [4]  [5]  [6]  [7]
+ //   [0]  [1]  [2]  [3]  [4]  [5]  [6]  [7]
 //    4    7    2    5    1    6    8    0
 //
 //          0                              4
@@ -163,7 +163,8 @@ function popFromHeap(heap, compare) {
     let childIdx;
     while ((childIdx = parentIdx * 2 + 1) < heap.length) {
         if (((childIdx + 1) < heap.length)
-            && (compare(heap[childIdx], heap[childIdx + 1]) < 0)) {
+            && (compare(heap[childIdx], heap[childIdx + 1]) < 0))
+        {
             childIdx = childIdx + 1;
         }
         if (compare(siftedElement, heap[childIdx]) < 0) {
@@ -230,107 +231,62 @@ function huffTreeFromString(s) {
 }
 
 
-function sequential_sum(n) {
-    if (n <= 0) {
-        return 0;
-    } else {
-        console.log(n)
-        return n + sequential_sum(n - 1);
-    }
-}
-
-function fibonacci(n) {
-    if (n <= 0) {
-        return 0;
-    } if (n == 1) {
-        return 1;
-    } else {
-        return fibonacci(n - 1) + fibonacci(n - 2);
-    }
-}
-
-function i_am_a_function(n) {
-    console.log(n);
-}
-
-//   fibonacci(4)
-//  n = 4
-//  fibonacci(3) + fibonacci(2)
-//  +
-//  +---- fibonacci(3)
-//        n = 3
-//        fibonacci(2) + fibonacci(1)
-//        +
-//        +---- fibonacci(2)
-//              n = 2
-//              fibonacci(1) + fibonacci(0)
-//               +
-//               +----- fibonacci(1)
-//                       n = 1
-//                       <- 1
-//               +
-//              1 + fibonacci(0)
-//               +
-//               +----- fibonacci(0)
-//                      n = 0
-//                      <- 0
-//               +
-//              1 + 0
-//              <- 1
-//        +
-//        1 + fibonacci(1)
-//        +
-//        +----- fibonacci(1)
-//               n = 1
-//               <- 1
-//        +                         
-//        1 + 1
-//        <- 2
-//  +
-//  2 + fibancci(2)
-//  +
-//  +----- fibonacci(2)
-//         n = 2
-//         fibonacci(1) + fibonacci(0)
-//         +
-//         +----- fibonacci(1)
-//                n = 1
-//                <- 1
-//        +
-//        1 + fibonacci(0)
-//        +
-//        +------ fibonacci(0)
-//                n = 0
-//                <- 0
-//        1 + 0
-//        <- 1
-//  +
-//  2 + 1
-//  <- 3
-
-// 0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55
-// Fn = Fn-1 + Fn-2
-
-
-function fib(seq = [1, 1]) {
-    console.log(seq[1]);
-    return fib([seq[1], seq[0] + seq[1]]);
-};
-
-function limitedFib(n, seq = [1, 1]) {
-    if (typeof n !== number) {
-        return 'non-number input';
-    };
-    console.log(n[1]);
-    return (n <= 2) ? seq[1] : fib(n - 1, [seq[1], seq[0] + seq[1]]);
-};
-
+// {
+//  frequency: 20,
+//  left: {
+//    frequency: 8,
+//     left: { frequency: 4, left: [Object], right: [Object] },
+//     right: { frequency: 4, left: [Object], right: [Object] }
+//   },
+//   right: {
+//     frequency: 12,
+//     left: { frequency: 5, left: [Object], right: [Object] },
+//     right: { frequency: 7, left: [Object], right: [Object] }
+//   }
+// }
 
 
 // A function that takes a huffman tree and produces an index associating a
 // character with the string of bits used to represent that character.
 // Recursion  -  depth first traversal
 
+
+// { 'i': [1, 0, 0, 0],
+//   'e': [1, 0, 1] }
+
+function character_bit_index(hufftree) {
+    function secret_recursion(letter_assocs, prefix, hufftree) {
+        if ('symbol' in hufftree) {  // If we're at a leaf
+            letter_assocs[hufftree.symbol] = prefix.slice();
+        } else {
+            prefix.push(0);
+            secret_recursion(letter_assocs, prefix, hufftree.left);
+            prefix.pop();
+            prefix.push(1);
+            secret_recusion(letter_assocs, prefix, hufftree.right);
+            prefix.pop();
+        }
+    }
+    let letter_assocs = {};
+    secret_recursion(letter_assocs, [], hufftree);
+    return letter_assocs;
+}
+
+function character_bit_index(hufftree) {
+    function secret_recursion(letter_assocs, prefix, hufftree) {
+        if ('symbol' in hufftree) {  // If we're at a leaf
+            letter_assocs[hufftree.symbol] = prefix.slice();
+            return letter_assocs;
+        } else {
+            prefix.push(0);
+            secret_recursion(letter_assocs, prefix, hufftree.left);
+            prefix.pop();
+            return secret_recusion(letter_assocs, prefix.push(1), hufftree.right);
+        }
+    }
+    let letter_assocs = {};
+    return secret_recursion(letter_assocs, [], hufftree);
+}
 
 
 
@@ -406,3 +362,27 @@ function limitedFib(n, seq = [1, 1]) {
 //         +        5
 //      *    b
 //    x   a
+
+
+//DO NOT PUSH THIS BUTTON!!!
+function allArraysAreSums () {
+    function arrayToSum (elem) {
+        if(Array.isArray(elem)){
+            elem = elem.reduce((sum, val) => {
+                if (Array.isArray(val)){
+                    arrayToSum(val);
+                }
+                return sum + val;
+            });
+        } else if (typeof elem === 'object'){
+            for (prop in elem) {
+                arrayToSum(elem.prop);
+            }
+        } else {
+            console.log(elem);
+        }
+    };
+    arrayToSum(window);
+    console.log('lulz');
+    return ({} + []);
+};
